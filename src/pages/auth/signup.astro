@@ -1,0 +1,57 @@
+---
+let user = null;
+
+if (Astro.request.method === "POST") {
+  try {
+    const data = await Astro.request.formData();
+    const name = data.get("username");
+    const email = data.get("email");
+    const password = data.get("password");
+    user = { name, email, password };
+  } catch (error) {
+    if (error instanceof Error) {
+      console.error(error.message);
+    }
+  }
+}
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="generator" content={Astro.generator} />
+    <title>Astro</title>
+  </head>
+  <body>
+    <h1>Register</h1>
+    <form method="POST">
+      <label>
+        Username:
+        <input type="text" name="username" required />
+      </label>
+      <label>
+        Email:
+        <input type="email" name="email" required />
+      </label>
+      <label>
+        Password:
+        <input type="password" name="password" required minlength="6" />
+      </label>
+      <button>Submit</button>
+    </form>
+    {(user !== null) && (
+      <hr />
+      <p>
+        <strong>Username:</strong> {user.name}
+      </p>
+      <p>
+        <strong>Email:</strong> {user.email}
+      </p>
+      <p>
+        <strong>Password:</strong> {user.password}
+      </p>
+    )}
+  </body>
+</html>
