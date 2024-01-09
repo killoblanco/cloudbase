@@ -2,7 +2,7 @@
 import { getD1,table } from '../../db';
 
 let user = null;
-
+let error = null;
 
 if (Astro.request.method === "POST") {
   try {
@@ -24,6 +24,7 @@ if (Astro.request.method === "POST") {
   } catch (error) {
     if (error instanceof Error) {
       console.error(error.message);
+      error = error.message;
     }
   }
 }
@@ -56,6 +57,11 @@ if (Astro.request.method === "POST") {
       </label>
       <button>Submit</button>
     </form>
+    {(error !== null) && (
+      <p>
+        <strong>Error:</strong> {error}
+      </p>
+    )}
     {(user !== null) && (
       <hr />
       <p>
