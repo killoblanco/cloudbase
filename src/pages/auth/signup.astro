@@ -1,7 +1,7 @@
 ---
-import { getD1,table } from '../../db';
+import { getD1, table } from "../../db";
 
-let user = null;
+let user: any = {};
 let error = null;
 
 if (Astro.request.method === "POST") {
@@ -11,16 +11,20 @@ if (Astro.request.method === "POST") {
     const email = data.get("email");
     const password = data.get("password");
 
+    user = { name, email, password };
+
     const db = getD1(Astro.locals.runtime.env.DB);
 
-    const res = await db.insert(table.users).values({
-      name: name as string,
-      phone: 0
-    }).returning();
+    const [res] = await db
+      .insert(table.users)
+      .values({
+        name: name as string,
+        phone: 0,
+      })
+      .returning();
 
-    console.log({ res})
-
-    user = { name, email, password };
+    user = res;
+    Astro.locals.user = user;
   } catch (error) {
     if (error instanceof Error) {
       console.error(error.message);
@@ -40,7 +44,7 @@ if (Astro.request.method === "POST") {
   </head>
   <body>
     <pre>{JSON.stringify({})}</pre>
-    <hr>
+    <hr />
     <h1>Register</h1>
     <form method="POST">
       <label>
@@ -57,22 +61,20 @@ if (Astro.request.method === "POST") {
       </label>
       <button>Submit</button>
     </form>
-    {(error !== null) && (
-      <p>
-        <strong>Error:</strong> {error}
-      </p>
-    )}
-    {(user !== null) && (
-      <hr />
-      <p>
-        <strong>Username:</strong> {user.name}
-      </p>
-      <p>
-        <strong>Email:</strong> {user.email}
-      </p>
-      <p>
-        <strong>Password:</strong> {user.password}
-      </p>
-    )}
+    {
+      error !== null && (
+        <p>
+          <strong>Error:</strong> {error}
+        </p>
+      )
+    }
+    {user !== null && <hr />}
+    {
+      Object.entries(user).map(([key, value]) => (
+        <p>
+          <strong>{key}:</strong> {value}
+        </p>
+      ))
+    }
   </body>
 </html>
