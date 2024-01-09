@@ -1,5 +1,7 @@
 # build output
 dist/
+functions/
+
 # generated files
 .astro/
 .wrangler/
