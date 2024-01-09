@@ -11,9 +11,6 @@ type Runtime = import('@astrojs/cloudflare').DirectoryRuntime<ENV>;
 
 declare namespace App {
   interface Locals extends Runtime {
-    user: {
-      name: string;
-      surname: string;
-    };
+    user: any;
   }
 }
