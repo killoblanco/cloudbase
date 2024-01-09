@@ -1,0 +1,9 @@
+compatibility_date = "2023-12-31"
+node_compat = true
+
+[[ d1_databases ]]
+binding = "DB"
+database_name = "mobiliary"
+database_id = "9763c6f9-87bf-421a-b465-ee7d7fe70e71"
+preview_database_id = "DB"
+migrations_dir = "./migrations"
